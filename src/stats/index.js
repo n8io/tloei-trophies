@@ -6,8 +6,8 @@ import { print } from './adjustments/print';
 
 const { PRINT } = getConfig();
 
-export const process = async ({ settings, weekId }) => {
-  const matchups = await fetchWeekScores({ settings, weekId });
+export const process = async ({ seasonId, settings, weekId }) => {
+  const matchups = await fetchWeekScores({ seasonId, settings, weekId });
   const amendedMatchups = addAdjustments({ matchups, settings });
   const slimMatchups = await Matchup.apiToUi(amendedMatchups);
 

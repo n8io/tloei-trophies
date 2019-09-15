@@ -30,8 +30,8 @@ const awayTransform = makeMatchupTransform(true);
 const homeTransform = makeMatchupTransform(false);
 
 // eslint-disable-next-line max-statements
-export const fetch = async ({ settings, weekId }) => {
-  const url = new URL(hydrate(Url.API_LEAGUE_SETTINGS));
+export const fetch = async ({ seasonId, settings, weekId }) => {
+  const url = new URL(hydrate(Url.API_LEAGUE_SETTINGS, { seasonId, weekId }));
   const members = LeagueMember.selector(settings);
 
   url.searchParams.set(LeagueView.SEARCH_PARAM_NAME, LeagueView.MATCHUPS);

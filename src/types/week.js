@@ -3,20 +3,28 @@ import { prop, subtract } from 'ramda';
 import { fetch } from 'utils/fetch';
 import { log } from 'utils/log';
 import { LeagueView } from './leagueViews';
+import { Season } from './season';
 import { hydrate, Url } from './url';
 
 const selector = prop('scoringPeriodId');
 
+let weekId = null;
+
 // eslint-disable-next-line max-statements
-const getWeekId = async () => {
+const current = async tempSeasonId => {
+  if (weekId) return weekId;
+
+  const seasonId = tempSeasonId || (await Season.current());
+
   const config = getConfig();
 
   const { ESPN_WEEK_ID: tempWeekId, PREVIOUS_WEEK } = config;
 
-  let weekId = tempWeekId;
+  // eslint-disable-next-line require-atomic-updates
+  weekId = tempWeekId;
 
   if (!weekId) {
-    const url = new URL(hydrate(Url.API_LEAGUE_SETTINGS));
+    const url = new URL(hydrate(Url.API_LEAGUE_SETTINGS, { seasonId }));
 
     url.searchParams.set(LeagueView.SEARCH_PARAM_NAME, LeagueView.LIGHT);
 
@@ -24,6 +32,7 @@ const getWeekId = async () => {
 
     const response = await fetch(url.href);
 
+    // eslint-disable-next-line require-atomic-updates
     weekId = selector(response);
 
     log(`👍 Current week is ${weekId}.`);
@@ -31,6 +40,7 @@ const getWeekId = async () => {
 
   if (PREVIOUS_WEEK) {
     log(`◀️ PREVIOUS_WEEK flag provided. Adjusting to prior week.`);
+    // eslint-disable-next-line require-atomic-updates
     weekId = subtract(weekId, 1);
   }
 
@@ -40,5 +50,5 @@ const getWeekId = async () => {
 };
 
 export const Week = {
-  getWeekId,
+  current,
 };

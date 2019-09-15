@@ -1,4 +1,4 @@
 import { fetch as fetchMatchups } from './matchups';
 
-export const fetch = ({ settings, weekId }) =>
-  fetchMatchups({ settings, weekId });
+export const fetch = ({ seasonId, settings, weekId }) =>
+  fetchMatchups({ seasonId, settings, weekId });

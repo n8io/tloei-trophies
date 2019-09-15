@@ -15,6 +15,7 @@ const config = Object.keys(process.env)
       [
         'APPLY_ADJUSTMENTS',
         'DEBUG',
+        'PREVIOUS_SEASON',
         'PREVIOUS_WEEK',
         'PRINT',
         'SHOW_CONFIG',
@@ -28,6 +29,7 @@ const getConfig = () =>
     props => ({
       APPLY_ADJUSTMENTS: false,
       DEBUG: '',
+      PREVIOUS_SEASON: false,
       PREVIOUS_WEEK: false,
       PRINT: false,
       SHOW_CONFIG: false,
@@ -45,11 +47,7 @@ const getConfig = () =>
   )(config);
 
 const validate = cfg => {
-  const requiredKeys = [
-    'ESPN_LEAGUE_ID',
-    'ESPN_SEASON_ID',
-    'ESPN_SESSION_COOKIE',
-  ];
+  const requiredKeys = ['ESPN_LEAGUE_ID', 'ESPN_SESSION_COOKIE'];
 
   const invalidKeys = requiredKeys.filter(key => isNil(prop(key, cfg)));
 
