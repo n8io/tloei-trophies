@@ -1,33 +1,31 @@
-import { flatten, propEq } from 'ramda';
+import { contains, flatten, pick } from 'ramda';
 import { Bonus } from 'types/bonus';
+import { BonusAmount } from 'types/bonusAmount';
 import { LineupSlot } from 'types/lineupSlots';
 import { Player } from 'types/player';
 import { Stat } from 'types/stat';
 
-// eslint-disable-next-line new-cap
-const teId = settings => LineupSlot.TE(settings).id;
-
-const processPlayer = player => {
+const calculateBonuses = player => {
   const bonuses = [];
   const receptions = player.stats[Stat.REC.toString()] || 0;
   const receivingYards = player.stats[Stat.REC_YDS.toString()] || 0;
 
-  const receptionBonus = receptions * Bonus.TE_REC;
+  const receptionBonus = receptions * BonusAmount.TE_REC;
 
   receptionBonus &&
     bonuses.push({
       bonus: receptionBonus,
       player: Player.apiToUi(player),
-      type: 'TE_REC',
+      type: Bonus.TE_REC,
     });
 
-  const receivingYardsBonus = receivingYards * Bonus.TE_REC_YDS;
+  const receivingYardsBonus = receivingYards * BonusAmount.TE_REC_YDS;
 
   receivingYardsBonus &&
     bonuses.push({
       bonus: receivingYardsBonus,
       player: Player.apiToUi(player),
-      type: 'TE_REC_YDS',
+      type: Bonus.TE_REC_YDS,
     });
 
   return bonuses;
@@ -35,12 +33,15 @@ const processPlayer = player => {
 
 // eslint-disable-next-line complexity, max-statements
 export const adjustments = settings => players => {
-  // eslint-disable-next-line new-cap
-  const isTe = propEq('lineupSlotId', teId(settings));
+  const position =
+    // eslint-disable-next-line new-cap
+    pick(['id', 'eligiblePositions'], LineupSlot.TE(settings));
 
-  const tes = players.filter(isTe);
+  const isPositionEligible = ({ defaultPositionId }) =>
+    contains(defaultPositionId, position.eligiblePositions);
 
-  const bonuses = tes.map(processPlayer);
+  const eligiblePlayers = players.filter(isPositionEligible);
+  const bonuses = eligiblePlayers.map(calculateBonuses);
 
   return flatten(bonuses);
 };
