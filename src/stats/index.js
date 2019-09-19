@@ -1,17 +1,41 @@
 import { getConfig } from 'config';
 import { Matchup } from 'types/matchup';
+import { Trophy } from 'types/trophy';
 import { fetch as fetchWeekScores } from '../scores';
-import { addAdjustments, apply } from './adjustments';
-import { print } from './adjustments/print';
+import { addAdjustments } from './adjustments';
 
 const { PRINT } = getConfig();
 
 export const process = async ({ seasonId, settings, weekId }) => {
   const matchups = await fetchWeekScores({ seasonId, settings, weekId });
-  const amendedMatchups = addAdjustments({ matchups, settings });
-  const slimMatchups = await Matchup.apiToUi(amendedMatchups);
+  const slimMatchups = await Matchup.apiToUi(
+    addAdjustments({ matchups, settings })
+  );
 
-  PRINT && print({ matchups: slimMatchups, settings });
+  const flattened = Matchup.uiToFlattened(settings)(slimMatchups);
 
-  await apply({ matchups: slimMatchups, weekId });
+  const trophies = [
+    {
+      players: Trophy.findDefensivePlayerHighScore(flattened, 3),
+      trophy: Trophy.HS_DP,
+    },
+    {
+      players: Trophy.findOffensivePlayerHighScore(flattened, 3),
+      trophy: Trophy.HS_OP,
+    },
+    {
+      players: Trophy.findSpecialTeamsPlayerHighScore(flattened, 3),
+      trophy: Trophy.HS_ST,
+    },
+    {
+      players: Trophy.findHindsightPlayerHighScore(flattened, 3),
+      trophy: Trophy.HS_BP,
+    },
+    {
+      players: Trophy.findTeamHighScore(slimMatchups, 3),
+      trophy: Trophy.HS_T,
+    },
+  ];
+
+  PRINT && Trophy.print(trophies);
 };

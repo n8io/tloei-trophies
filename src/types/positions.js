@@ -1,45 +1,71 @@
 import { find, path, propEq } from 'ramda';
 
-const findPositionByAbbrev = ({ espnSettings, position }) => {
-  const positions = path(['constants', 'positions'], espnSettings);
+const findPositionByAbbrev = ({ espn, position }) => {
+  const positions = path(['constants', 'positions'], espn);
 
   return find(propEq('abbrev', position), positions);
 };
 
-const findPositionById = ({ espnSettings, id }) => {
-  const positions = path(['positions'], espnSettings);
+const findPositionById = ({ espn, id }) => {
+  const positions = path(['constants', 'positions'], espn);
 
   return find(propEq('id', id), positions);
 };
 
-const QB = espnSettings =>
-  findPositionByAbbrev({ espnSettings, position: 'QB' });
+const QB = ({ espn }) => findPositionByAbbrev({ espn, position: 'QB' });
+const RB = ({ espn }) => findPositionByAbbrev({ espn, position: 'RB' });
+const WR = ({ espn }) => findPositionByAbbrev({ espn, position: 'WR' });
+const TE = ({ espn }) => findPositionByAbbrev({ espn, position: 'TE' });
+const CB = ({ espn }) => findPositionByAbbrev({ espn, position: 'CB' });
+const DE = ({ espn }) => findPositionByAbbrev({ espn, position: 'DE' });
+const DT = ({ espn }) => findPositionByAbbrev({ espn, position: 'DT' });
+const LB = ({ espn }) => findPositionByAbbrev({ espn, position: 'LB' });
+const K = ({ espn }) => findPositionByAbbrev({ espn, position: 'K' });
+const P = ({ espn }) => findPositionByAbbrev({ espn, position: 'P' });
+const S = ({ espn }) => findPositionByAbbrev({ espn, position: 'S' });
 
-const RB = espnSettings =>
-  findPositionByAbbrev({ espnSettings, position: 'RB' });
+const isDefensive = settings => player => {
+  /* eslint-disable new-cap */
+  const { id: cbId } = CB(settings);
+  const { id: deId } = DE(settings);
+  const { id: dtId } = DT(settings);
+  const { id: lbId } = LB(settings);
+  const { id: sId } = S(settings);
+  /* eslint-enable new-cap */
 
-const WR = espnSettings =>
-  findPositionByAbbrev({ espnSettings, position: 'WR' });
+  const { defaultPositionId: positionId } = player;
 
-const TE = espnSettings =>
-  findPositionByAbbrev({ espnSettings, position: 'TE' });
+  return [cbId, deId, dtId, lbId, sId].indexOf(positionId) > -1;
+};
 
-const LB = espnSettings =>
-  findPositionByAbbrev({ espnSettings, position: 'LB' });
+const isOffensive = settings => player => {
+  /* eslint-disable new-cap */
+  const { id: qbId } = QB(settings);
+  const { id: rbId } = RB(settings);
+  const { id: teId } = TE(settings);
+  const { id: wrId } = WR(settings);
+  /* eslint-enable new-cap */
 
-const DL = espnSettings =>
-  findPositionByAbbrev({ espnSettings, position: 'DL' });
+  const { defaultPositionId: positionId } = player;
 
-const DB = espnSettings =>
-  findPositionByAbbrev({ espnSettings, position: 'DB' });
+  return [qbId, rbId, teId, wrId].indexOf(positionId) > -1;
+};
 
-const K = espnSettings => findPositionByAbbrev({ espnSettings, position: 'K' });
+const isSpecialTeams = settings => player => {
+  /* eslint-disable new-cap */
+  const { id: kId } = K(settings);
+  const { id: pId } = P(settings);
+  /* eslint-enable new-cap */
 
-const P = espnSettings => findPositionByAbbrev({ espnSettings, position: 'P' });
+  const { defaultPositionId: positionId } = player;
+
+  return [kId, pId].indexOf(positionId) > -1;
+};
 
 export const Position = {
-  DB,
-  DL,
+  CB,
+  DE,
+  DT,
   K,
   LB,
   P,
@@ -49,4 +75,7 @@ export const Position = {
   WR,
   findPositionByAbbrev,
   findPositionById,
+  isDefensive,
+  isOffensive,
+  isSpecialTeams,
 };

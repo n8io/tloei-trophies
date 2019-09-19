@@ -11,14 +11,8 @@ const printAdjustments = adjustments => {
 
 export const print = ({ matchups, settings }) => {
   const adjustments = matchups.reduce((acc, { away, home }) => {
-    const { abbrev: aAbbrev } = LeagueMember.findById({
-      id: away.teamId,
-      settings,
-    });
-    const { abbrev: hAbbrev } = LeagueMember.findById({
-      id: home.teamId,
-      settings,
-    });
+    const { abbrev: aAbbrev } = LeagueMember.findById(settings)(away.teamId);
+    const { abbrev: hAbbrev } = LeagueMember.findById(settings)(home.teamId);
 
     return [
       ...acc,

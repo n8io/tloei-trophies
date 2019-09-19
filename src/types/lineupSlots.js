@@ -25,6 +25,28 @@ const BENCH = ({ espn }) => findLineupSlotByAbbrev({ espn, slot: 'BE' });
 const IR = ({ espn }) => findLineupSlotByAbbrev({ espn, slot: 'IR' });
 const FLEX = ({ espn }) => findLineupSlotByAbbrev({ espn, slot: 'FLEX' });
 
+const isStarter = settings => player => {
+  /* eslint-disable new-cap */
+  const { id: benchId } = BENCH(settings);
+  const { id: irId } = IR(settings);
+  /* eslint-enable new-cap */
+
+  const { lineupSlotId } = player;
+
+  return [benchId, irId].indexOf(lineupSlotId) === -1;
+};
+
+const isBench = settings => player => {
+  /* eslint-disable new-cap */
+  const { id: benchId } = BENCH(settings);
+  const { id: irId } = IR(settings);
+  /* eslint-enable new-cap */
+
+  const { lineupSlotId } = player;
+
+  return [benchId, irId].indexOf(lineupSlotId) > -1;
+};
+
 export const LineupSlot = {
   BENCH,
   DB,
@@ -40,4 +62,6 @@ export const LineupSlot = {
   WR,
   findLineupSlotByAbbrev,
   findLineupSlotById,
+  isBench,
+  isStarter,
 };

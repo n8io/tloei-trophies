@@ -32,7 +32,25 @@ const selector = ({ lineupSlotId, playerPoolEntry }) => {
   };
 };
 
-const apiToUi = pick(['appliedStatTotal', 'firstName', 'id', 'lastName']);
+const apiToUi = pick([
+  'appliedStatTotal',
+  'appliedStatTotalNew',
+  'bonus',
+  'defaultPositionId',
+  'firstName',
+  'id',
+  'isDefensive',
+  'isOffensive',
+  'isSpecialTeams',
+  'isStarter',
+  'lastName',
+  'lineupPosition',
+  'lineupSlotId',
+  'position',
+  'proTeam',
+  'team',
+  'teamId',
+]);
 
 export const Player = {
   apiToUi,
