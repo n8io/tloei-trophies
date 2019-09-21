@@ -22,11 +22,12 @@ const apiToUi = reduce(
 
 const uiToFlattened = settings =>
   reduce(
-    (acc, { away, home }) => [
+    (acc, { away, home, id }) => [
       ...acc,
       ...map(
         p => ({
           ...p,
+          matchupId: id,
           team: LeagueMember.findById(settings)(away.teamId).abbrev,
           teamId: away.teamId,
         }),
@@ -35,6 +36,7 @@ const uiToFlattened = settings =>
       ...map(
         p => ({
           ...p,
+          matchupId: id,
           team: LeagueMember.findById(settings)(home.teamId).abbrev,
           teamId: home.teamId,
         }),

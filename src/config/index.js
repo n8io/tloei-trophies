@@ -13,8 +13,9 @@ const config = Object.keys(process.env)
     k =>
       k.startsWith('ESPN_') ||
       [
-        'APPLY_ADJUSTMENTS',
+        'APPLY_TROPHIES',
         'DEBUG',
+        'GITHUB_GIST_TOKEN',
         'PREVIOUS_SEASON',
         'PREVIOUS_WEEK',
         'PRINT',
@@ -27,8 +28,9 @@ const config = Object.keys(process.env)
 const getConfig = () =>
   pipe(
     props => ({
-      APPLY_ADJUSTMENTS: false,
+      APPLY_TROPHIES: false,
       DEBUG: '',
+      GITHUB_GIST_TOKEN: '',
       PREVIOUS_SEASON: false,
       PREVIOUS_WEEK: false,
       PRINT: false,
@@ -36,7 +38,7 @@ const getConfig = () =>
       ...props,
     }),
     evolve({
-      APPLY_ADJUSTMENTS: stringToBool,
+      APPLY_TROPHIES: stringToBool,
       ESPN_LEAGUE_ID: number(),
       ESPN_SEASON_ID: number(),
       ESPN_WEEK_ID: number(),
@@ -47,7 +49,11 @@ const getConfig = () =>
   )(config);
 
 const validate = cfg => {
-  const requiredKeys = ['ESPN_LEAGUE_ID', 'ESPN_SESSION_COOKIE'];
+  const requiredKeys = [
+    'ESPN_LEAGUE_ID',
+    'ESPN_SESSION_COOKIE',
+    'GITHUB_GIST_TOKEN',
+  ];
 
   const invalidKeys = requiredKeys.filter(key => isNil(prop(key, cfg)));
 
