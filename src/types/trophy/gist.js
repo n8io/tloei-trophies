@@ -45,17 +45,23 @@ const toMatchupUrl = ({ message, seasonId, teamId, weekId }) =>
   toMd([
     {
       link: {
-        source: `https://fantasy.espn.com/football/fantasycast?leagueId=220779&scoringPeriodId=${weekId}&seasonId=${seasonId}&teamId=${teamId}&view=scoringperiod`,
+        source: `https://fantasy.espn.com/football/boxscore?leagueId=220779&scoringPeriodId=${weekId}&seasonId=${seasonId}&teamId=${teamId}&view=scoringperiod`,
         title: message,
       },
     },
   ]);
 
 const formatTeam = ({ seasonId, weekId }) => team => {
-  const { team: name, teamId, totalPoints: points } = team;
+  const { team: name, teamId, totalPoints } = team;
 
   const rank = Rank[team.rank - 1];
   const owner = formatOwner({ seasonId, team: name, teamId, weekId });
+  const points = toMatchupUrl({
+    message: totalPoints,
+    seasonId,
+    teamId,
+    weekId,
+  });
 
   return [rank, owner, points];
 };
