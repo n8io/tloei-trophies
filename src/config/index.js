@@ -14,8 +14,12 @@ const config = Object.keys(process.env)
       k.startsWith('ESPN_') ||
       [
         'APPLY_TROPHIES',
+        'BITLY_ACCESS_TOKEN',
+        'BITLY_APP_CLIENT_ID',
+        'BITLY_APP_SECRET',
         'DEBUG',
         'GITHUB_GIST_TOKEN',
+        'GOOGLE_DOC_ID',
         'PREVIOUS_SEASON',
         'PREVIOUS_WEEK',
         'PRINT',
@@ -29,8 +33,12 @@ const getConfig = () =>
   pipe(
     props => ({
       APPLY_TROPHIES: false,
+      BITLY_ACCESS_TOKEN: '',
+      BITLY_APP_CLIENT_ID: '',
+      BITLY_APP_SECRET: '',
       DEBUG: '',
       GITHUB_GIST_TOKEN: '',
+      GOOGLE_DOC_ID: '',
       PREVIOUS_SEASON: false,
       PREVIOUS_WEEK: false,
       PRINT: false,
@@ -51,8 +59,12 @@ const getConfig = () =>
 const validate = cfg => {
   const requiredKeys = [
     'ESPN_LEAGUE_ID',
+    'BITLY_ACCESS_TOKEN',
+    'BITLY_APP_CLIENT_ID',
+    'BITLY_APP_SECRET',
     'ESPN_SESSION_COOKIE',
     'GITHUB_GIST_TOKEN',
+    'GOOGLE_DOC_ID',
   ];
 
   const invalidKeys = requiredKeys.filter(key => isNil(prop(key, cfg)));

@@ -1,6 +1,5 @@
 import {
   both,
-  reduce,
   descend,
   filter,
   flatten,

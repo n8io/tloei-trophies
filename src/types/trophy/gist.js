@@ -148,8 +148,15 @@ const formatTitle = ({ seasonId, weekId }) =>
 const toFiles = ({ markdown: content, seasonId, weekId }) => ({
   [formatFileName({ seasonId, weekId })]: { content },
 });
+
+const addTrophyProp = ({ key, ...rest }) => ({
+  ...rest,
+  trophy: Enumeration[key],
+});
+
 const trophiesToGist = ({ seasonId, weekId }) =>
   pipe(
+    map(addTrophyProp),
     map(transformTrophy({ seasonId, weekId })),
     insert(0, { h1: formatTitle({ seasonId, weekId }) }),
     insert(1, {
@@ -166,7 +173,7 @@ const trophiesToGist = ({ seasonId, weekId }) =>
     })
   );
 
-const saveGist = async ({ seasonId, trophies, weekId }) => {
+const save = async ({ seasonId, trophies, weekId }) => {
   const options = trophiesToGist({ seasonId, weekId })(trophies);
 
   // console.log(JSON.stringify(options, null, 2));
@@ -176,4 +183,4 @@ const saveGist = async ({ seasonId, trophies, weekId }) => {
   return url;
 };
 
-export { saveGist };
+export { save };
