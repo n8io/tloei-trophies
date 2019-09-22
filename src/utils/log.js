@@ -6,5 +6,6 @@ export const log = message =>
       hour12: true,
       minute: 'numeric',
       seconds: 'numeric',
+      timeStyle: 'medium',
     })}: ${message}`
   );

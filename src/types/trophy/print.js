@@ -21,7 +21,13 @@ const printTrophy = cond([
   [T, formatPlayerTrophy],
 ]);
 
+const addTrophyProp = ({ key, ...rest }) => ({
+  ...rest,
+  trophy: Enumeration[key],
+});
+
 export const print = pipe(
+  map(addTrophyProp),
   map(printTrophy),
   join('\n')
 );
