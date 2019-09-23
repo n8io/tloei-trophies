@@ -11,10 +11,21 @@ import { memberMatchupIdsByWeek } from './utils/memberMatchupIdsByWeek';
 const makeMatchupTransform = isAway =>
   pipe(
     prop(isAway ? 'away' : 'home'),
-    pick(['rosterForCurrentScoringPeriod', 'teamId', 'totalPoints']),
-    ({ rosterForCurrentScoringPeriod, ...rest }) => ({
+    pick([
+      'rosterForCurrentScoringPeriod',
+      'teamId',
+      'totalPoints',
+      'totalPointsLive',
+    ]),
+    ({
+      rosterForCurrentScoringPeriod,
+      totalPoints,
+      totalPointsLive,
+      ...rest
+    }) => ({
       ...rest,
       isAway,
+      totalPoints: defaultTo(totalPoints, totalPointsLive),
       ...pipe(
         pick(['entries']),
         defaultTo([]),
