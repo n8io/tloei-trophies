@@ -75,8 +75,8 @@ const formatTeams = ({ seasonId, weekId }) => teams => [
   },
 ];
 
-const formatPlayer = ({ seasonId, weekId }) => (player, index) => {
-  const rank = Rank[index];
+const formatPlayer = ({ seasonId, weekId }) => player => {
+  const rank = Rank[player.rank - 1];
   const {
     bonus = 0,
     id,

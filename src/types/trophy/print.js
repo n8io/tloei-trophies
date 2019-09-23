@@ -3,10 +3,10 @@ import { Enumeration } from './enumeration';
 
 const tab = '  ';
 
-const formatTeam = (p, index) => `${index + 1}. ${p.team} - ${p.totalPoints}`;
+const formatTeam = p => `${p.rank}. ${p.team} - ${p.totalPoints}`;
 
-const formatPlayer = (p, index) =>
-  `${index + 1}. ${p.team} - ${p.proTeam.toUpperCase()} ${p.position} ${
+const formatPlayer = p =>
+  `${p.rank}. ${p.team} - ${p.proTeam.toUpperCase()} ${p.position} ${
     p.firstName
   } ${p.lastName} - ${p.totalPoints}`;
 

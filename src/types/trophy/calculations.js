@@ -47,7 +47,7 @@ const calculateSpecialTeamsPlayerHighScores = (players, limit = 1) =>
     rankEm
   )(players);
 
-const calculateHindsightPlayerHighScores = (players, limit = 1) =>
+const calculateBenchPlayerHighScores = (players, limit = 1) =>
   pipe(
     filter(propEq('isStarter', false)),
     sort(descend(prop('appliedStatTotal'))),
@@ -74,8 +74,8 @@ const calculateTeamHighScores = (matchups, limit = 1) =>
   )(matchups);
 
 export const Calculations = {
+  calculateBenchPlayerHighScores,
   calculateDefensivePlayerHighScores,
-  calculateHindsightPlayerHighScores,
   calculateOffensivePlayerHighScores,
   calculateSpecialTeamsPlayerHighScores,
   calculateTeamHighScores,

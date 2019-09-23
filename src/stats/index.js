@@ -63,7 +63,7 @@ const process = async ({ seasonId, settings, weekId }) => {
     },
     {
       key: 'HS_BP',
-      players: Trophy.calculateHindsightPlayerHighScores(flattened, 3),
+      players: Trophy.calculateBenchPlayerHighScores(flattened, 3),
     },
   ];
 

@@ -25,6 +25,14 @@ const makeColumnUpdater = row => (name, value) => {
   row[name] = value;
 };
 
+const updatePlayerCells = (update, winner, basePoints) => {
+  update('player', `${winner.firstName} ${winner.lastName}`);
+  update('position', winner.position);
+  update('team', winner.proTeam);
+  update('adjustmentpoints', winner.bonus);
+  update('basepoints', basePoints);
+};
+
 // eslint-disable-next-line max-statements
 const saveTrophy = ({ doc, summaryUrl, weekId }) => async trophy => {
   const { key, players } = trophy;
@@ -43,11 +51,7 @@ const saveTrophy = ({ doc, summaryUrl, weekId }) => async trophy => {
   update('points', winner.totalPoints);
 
   if (key !== Google.HS_T) {
-    update('player', `${winner.firstName} ${winner.lastName}`);
-    update('position', winner.position);
-    update('team', winner.proTeam);
-    update('adjustmentpoints', winner.bonus);
-    update('basepoints', basePoints);
+    updatePlayerCells(update, winner, basePoints);
   }
 
   await row.save();
