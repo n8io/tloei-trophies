@@ -9,8 +9,10 @@ import {
   prop,
   propEq,
   slice,
+  uniq,
   sort,
 } from 'ramda';
+import { randomIndex } from 'utils/randomIndex';
 import { rankByProp } from 'utils/rankByProp';
 import { renameKeys } from 'utils/renameKeys';
 
@@ -18,42 +20,76 @@ const normalizePointsProp = map(
   renameKeys({ appliedStatTotal: 'totalPoints' })
 );
 
-const rankEm = players => rankByProp('totalPoints', players);
+const rankSort = (a, b) => {
+  if (a.rank < b.rank) {
+    return -1;
+  } else if (a.rank > b.rank) {
+    return 1;
+  }
+
+  if (a.isTiebreakWinner) {
+    return -1;
+  } else if (b.isTiebreakWinner) {
+    return 1;
+  }
+
+  return 0;
+};
+
+const tiebreakEm = items => {
+  const ranks = pipe(
+    map(prop('rank')),
+    uniq
+  )(items);
+
+  const updated = ranks.map(rank => {
+    const ties = filter(propEq('rank', rank), items);
+
+    if (ties.length === 1) {
+      return flatten(ties);
+    }
+
+    const winnerIndex = randomIndex(ties);
+
+    ties[winnerIndex].isTiebreakWinner = true;
+
+    return flatten(ties);
+  });
+
+  return flatten(updated).sort(rankSort);
+};
+
+const normalize = limit =>
+  pipe(
+    sort(descend(prop('appliedStatTotal'))),
+    slice(0, limit),
+    normalizePointsProp,
+    rankByProp('totalPoints'),
+    tiebreakEm
+  );
 
 const calculateDefensivePlayerHighScores = (players, limit = 1) =>
   pipe(
     filter(both(propEq('isStarter', true), propEq('isDefensive', true))),
-    sort(descend(prop('appliedStatTotal'))),
-    slice(0, limit),
-    normalizePointsProp,
-    rankEm
+    normalize(limit)
   )(players);
 
 const calculateOffensivePlayerHighScores = (players, limit = 1) =>
   pipe(
     filter(both(propEq('isStarter', true), propEq('isOffensive', true))),
-    sort(descend(prop('appliedStatTotal'))),
-    slice(0, limit),
-    normalizePointsProp,
-    rankEm
+    normalize(limit)
   )(players);
 
 const calculateSpecialTeamsPlayerHighScores = (players, limit = 1) =>
   pipe(
     filter(both(propEq('isStarter', true), propEq('isSpecialTeams', true))),
-    sort(descend(prop('appliedStatTotal'))),
-    slice(0, limit),
-    normalizePointsProp,
-    rankEm
+    normalize(limit)
   )(players);
 
 const calculateBenchPlayerHighScores = (players, limit = 1) =>
   pipe(
     filter(propEq('isStarter', false)),
-    sort(descend(prop('appliedStatTotal'))),
-    slice(0, limit),
-    normalizePointsProp,
-    rankEm
+    normalize(limit)
   )(players);
 
 const teamTransform = pipe(pick(['team', 'teamId', 'totalPoints']));
@@ -67,10 +103,7 @@ const calculateTeamHighScores = (matchups, limit = 1) =>
   pipe(
     map(matchupToTeamScores),
     flatten,
-    sort(descend(prop('totalPoints'))),
-    slice(0, limit),
-    normalizePointsProp,
-    rankEm
+    normalize(limit)
   )(matchups);
 
 export const Calculations = {

@@ -47,7 +47,7 @@ const saveTrophy = ({ doc, summaryUrl, weekId }) => async trophy => {
     `${summaryUrl}#${slugify(Enumeration[key]).toLowerCase()}s`
   );
 
-  update('owner', winner.team);
+  update('owner', `${winner.isTiebreakWinner ? '*' : ''}${winner.team}`);
   update('points', winner.totalPoints);
 
   if (key !== Google.HS_T) {

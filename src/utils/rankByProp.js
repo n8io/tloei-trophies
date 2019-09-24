@@ -1,6 +1,7 @@
 import {
   add,
   ascend,
+  curryN,
   descend,
   findIndex,
   map,
@@ -11,7 +12,7 @@ import {
   sort,
 } from 'ramda';
 
-const rankByProp = (propName, items, isAscending) => {
+const rankByProp = curryN(2, (propName, items, isAscending) => {
   const selectPropOfInterest = prop(propName); // selector for prop of interest
   const direction = isAscending ? ascend : descend; // sort direction function
   const sortItemsByProp = sort(direction(selectPropOfInterest)); // sort by prop of interest comparator
@@ -33,6 +34,6 @@ const rankByProp = (propName, items, isAscending) => {
     map(addRank), // add rank to item
     sortItemByRank // sort by rank ascending
   )(items);
-};
+});
 
 export { rankByProp };

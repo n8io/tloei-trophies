@@ -6,9 +6,11 @@ const tab = '  ';
 const formatTeam = p => `${p.rank}. ${p.team} - ${p.totalPoints}`;
 
 const formatPlayer = p =>
-  `${p.rank}. ${p.team} - ${p.proTeam.toUpperCase()} ${p.position} ${
-    p.firstName
-  } ${p.lastName} - ${p.totalPoints}`;
+  `${p.isTiebreakWinner ? '*' : ''}${p.rank}. ${
+    p.team
+  } - ${p.proTeam.toUpperCase()} ${p.position} ${p.firstName} ${p.lastName} - ${
+    p.totalPoints
+  }`;
 
 const formatHighScoreTeamTrophy = ({ players, trophy }) =>
   `${trophy}s\n${tab}${players.map(formatTeam).join(`\n${tab}`)}`;
