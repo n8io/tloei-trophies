@@ -14,7 +14,9 @@ import {
   T,
   toUpper,
 } from 'ramda';
+import { shorten } from 'utils/bitly';
 import { Gist } from 'utils/gist';
+import { workbookUrl } from 'utils/google';
 import { Enumeration } from './enumeration';
 
 const Rank = ['🥇', '🥈', '🥉'];
@@ -155,7 +157,7 @@ const addTrophyProp = ({ key, ...rest }) => ({
   trophy: Enumeration[key],
 });
 
-const trophiesToGist = ({ seasonId, weekId }) =>
+const trophiesToGist = ({ seasonId, weekId, workbookShortUrl }) =>
   pipe(
     map(addTrophyProp),
     map(transformTrophy({ seasonId, weekId })),
@@ -168,6 +170,12 @@ const trophiesToGist = ({ seasonId, weekId }) =>
     append({
       p: '_* - won coin toss tiebreaker_',
     }),
+    append({
+      link: {
+        source: `${workbookShortUrl}`,
+        title: `Official log can be found here`,
+      },
+    }),
     flatten,
     toMd,
     markdown => ({
@@ -178,7 +186,10 @@ const trophiesToGist = ({ seasonId, weekId }) =>
   );
 
 const save = async ({ seasonId, trophies, weekId }) => {
-  const options = trophiesToGist({ seasonId, weekId })(trophies);
+  const workbookShortUrl = await shorten(workbookUrl());
+  const options = trophiesToGist({ seasonId, weekId, workbookShortUrl })(
+    trophies
+  );
 
   // console.log(JSON.stringify(options, null, 2));
 

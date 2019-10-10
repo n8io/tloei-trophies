@@ -1,4 +1,5 @@
 import {
+  assoc,
   both,
   descend,
   filter,
@@ -62,10 +63,10 @@ const tiebreakEm = items => {
 const normalize = limit =>
   pipe(
     sort(descend(prop('appliedStatTotal'))),
-    slice(0, limit),
     normalizePointsProp,
     rankByProp('totalPoints'),
-    tiebreakEm
+    tiebreakEm,
+    slice(0, limit)
   );
 
 const calculateDefensivePlayerHighScores = (players, limit = 1) =>
@@ -103,6 +104,7 @@ const calculateTeamHighScores = (matchups, limit = 1) =>
   pipe(
     map(matchupToTeamScores),
     flatten,
+    map(obj => assoc('appliedStatTotal', prop('totalPoints', obj), obj)),
     normalize(limit)
   )(matchups);
 
