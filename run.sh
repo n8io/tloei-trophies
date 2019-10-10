@@ -13,7 +13,7 @@ export NVM_DIR="/root/.nvm"
 
 cd "$DIR"
 
-export APPLY_ADJUSTMENTS=1
+export APPLY_TROPHIES=1
 export PRINT=1
 
 if [ -z "$CMD" ]; then
