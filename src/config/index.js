@@ -20,10 +20,12 @@ const config = Object.keys(process.env)
         'DEBUG',
         'GITHUB_GIST_TOKEN',
         'GOOGLE_DOC_ID',
+        'NOTIFY',
         'PREVIOUS_SEASON',
         'PREVIOUS_WEEK',
         'PRINT',
         'SHOW_CONFIG',
+        'SLACK_WEBHOOK_URL',
       ].indexOf(k) > -1
   )
   // eslint-disable-next-line no-process-env
@@ -39,10 +41,12 @@ const getConfig = () =>
       DEBUG: '',
       GITHUB_GIST_TOKEN: '',
       GOOGLE_DOC_ID: '',
+      NOTIFY: false,
       PREVIOUS_SEASON: false,
       PREVIOUS_WEEK: false,
       PRINT: false,
       SHOW_CONFIG: false,
+      SLACK_WEBHOOK_URL: '',
       ...props,
     }),
     evolve({
@@ -50,6 +54,7 @@ const getConfig = () =>
       ESPN_LEAGUE_ID: number(),
       ESPN_SEASON_ID: number(),
       ESPN_WEEK_ID: number(),
+      NOTIFY: stringToBool,
       PREVIOUS_WEEK: stringToBool,
       PRINT: stringToBool,
       SHOW_CONFIG: stringToBool,
@@ -65,6 +70,7 @@ const validate = cfg => {
     'ESPN_SESSION_COOKIE',
     'GITHUB_GIST_TOKEN',
     'GOOGLE_DOC_ID',
+    'SLACK_WEBHOOK_URL',
   ];
 
   const invalidKeys = requiredKeys.filter(key => isNil(prop(key, cfg)));
@@ -77,7 +83,9 @@ const validate = cfg => {
 
   cfg.SHOW_CONFIG &&
     // eslint-disable-next-line no-console
-    console.log(JSON.stringify(pick(requiredKeys, cfg), null, 2));
+    console.log(
+      JSON.stringify(pick(['NOTIFY', 'PRINT', ...requiredKeys], cfg), null, 2)
+    );
 };
 
 export { getConfig, validate };
