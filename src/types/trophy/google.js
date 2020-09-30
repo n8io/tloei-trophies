@@ -2,22 +2,8 @@ import { has, head, map } from 'ramda';
 import slugify from 'slugify';
 import { Google } from 'types/google';
 import { shorten } from 'utils/bitly';
-import { initialize, worksheet, workbookUrl } from 'utils/google';
-import { log } from 'utils/log';
+import { initialize, workbookUrl, worksheet } from 'utils/google';
 import { Enumeration } from './enumeration';
-
-const getRows = sheet =>
-  new Promise((resolve, reject) => {
-    sheet.getRows(1, (err, rows) => {
-      if (err) {
-        log('🛑 Failed to fetch rows');
-
-        return reject(err);
-      }
-
-      return resolve(rows);
-    });
-  });
 
 const makeColumnUpdater = row => (name, value) => {
   if (!has(name, row)) return;
@@ -38,7 +24,7 @@ const saveTrophy = ({ doc, summaryUrl, weekId }) => async trophy => {
   const { key, players } = trophy;
   const winner = head(players);
   const sheet = await worksheet(doc, Google[key]);
-  const rows = await getRows(sheet);
+  const rows = await sheet.getRows(sheet);
   const row = rows[weekId - 1];
   const update = makeColumnUpdater(row);
   const basePoints = winner.totalPoints - winner.bonus;
