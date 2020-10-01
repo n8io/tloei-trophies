@@ -14,7 +14,7 @@ export NVM_DIR="/root/.nvm"
 
 cd "$DIR"
 
-export APPLY_TROPHIES=1
+export APPLY_TROPHIES=${APPLY_TROPHIES:-1}
 export PRINT=1
 
 if [ $NOTIFY = "notify" ]; then
