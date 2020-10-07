@@ -12,11 +12,11 @@ const makeColumnUpdater = row => (name, value) => {
 };
 
 const updatePlayerCells = (update, winner, basePoints) => {
-  update('player', `${winner.firstName} ${winner.lastName}`);
-  update('position', winner.position);
-  update('team', winner.proTeam);
-  update('adjustmentpoints', winner.bonus);
-  update('basepoints', basePoints);
+  update('Player', `${winner.firstName} ${winner.lastName}`);
+  update('Position', winner.position);
+  update('Team', winner.proTeam);
+  update('Adjustment Points', winner.bonus);
+  update('Base Points', basePoints);
 };
 
 // eslint-disable-next-line max-statements
@@ -29,12 +29,12 @@ const saveTrophy = ({ doc, summaryUrl, weekId }) => async trophy => {
   const update = makeColumnUpdater(row);
   const basePoints = winner.totalPoints - winner.bonus;
 
-  row.summary = await shorten(
+  row.Summary = await shorten(
     `${summaryUrl}#${slugify(Enumeration[key]).toLowerCase()}s`
   );
 
-  update('owner', `${winner.isTiebreakWinner ? '*' : ''}${winner.team}`);
-  update('points', winner.totalPoints);
+  update('Owner', `${winner.isTiebreakWinner ? '*' : ''}${winner.team}`);
+  update('Points', winner.totalPoints);
 
   if (key !== Google.HS_T) {
     updatePlayerCells(update, winner, basePoints);
