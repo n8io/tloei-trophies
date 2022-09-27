@@ -6,7 +6,7 @@ import { ProTeam } from 'types/proTeam';
 import { renameKeys } from 'utils/renameKeys';
 import { apply } from './apply';
 import { adjustments as dlAdjustments } from './dl';
-import { adjustments as teAdjustments } from './te';
+// import { adjustments as teAdjustments } from './te';
 
 const sumPlayerAdjustments = adjustments => ({ id }) =>
   pipe(
@@ -45,7 +45,7 @@ const addNewTotal = (adjustments, settings) =>
 const addTeamAdjustments = settings => ({ players = [], ...rest }) => {
   const adjustments = [
     ...dlAdjustments(settings)(players),
-    ...teAdjustments(settings)(players),
+    // ...teAdjustments(settings)(players),
   ];
 
   const output = {
