@@ -1,7 +1,7 @@
 import { has, head, map } from 'ramda';
 import slugify from 'slugify';
 import { Google } from 'types/google';
-import { shorten } from 'utils/bitly';
+import { shorten } from 'utils/shortio';
 import { initialize, workbookUrl, worksheet } from 'utils/google';
 import { Enumeration } from './enumeration';
 

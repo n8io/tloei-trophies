@@ -14,7 +14,7 @@ import {
   T,
   toUpper,
 } from 'ramda';
-import { shorten } from 'utils/bitly';
+import { shorten } from 'utils/shortio';
 import { Gist } from 'utils/gist';
 import { workbookUrl } from 'utils/google';
 import { Enumeration } from './enumeration';

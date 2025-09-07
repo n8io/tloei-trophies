@@ -14,16 +14,15 @@ const config = Object.keys(process.env)
       k.startsWith('ESPN_') ||
       [
         'APPLY_TROPHIES',
-        'BITLY_ACCESS_TOKEN',
-        'BITLY_APP_CLIENT_ID',
-        'BITLY_APP_SECRET',
         'DEBUG',
+        'FORCE_SHORT_LINK',
         'GITHUB_GIST_TOKEN',
         'GOOGLE_DOC_ID',
         'NOTIFY',
         'PREVIOUS_SEASON',
         'PREVIOUS_WEEK',
         'PRINT',
+        'SHORT_IO_SECRET',
         'SHOW_CONFIG',
         'SLACK_WEBHOOK_URL',
       ].indexOf(k) > -1
@@ -35,16 +34,15 @@ const getConfig = () =>
   pipe(
     props => ({
       APPLY_TROPHIES: false,
-      BITLY_ACCESS_TOKEN: '',
-      BITLY_APP_CLIENT_ID: '',
-      BITLY_APP_SECRET: '',
       DEBUG: '',
+      FORCE_SHORT_LINK: false,
       GITHUB_GIST_TOKEN: '',
       GOOGLE_DOC_ID: '',
       NOTIFY: false,
       PREVIOUS_SEASON: false,
       PREVIOUS_WEEK: false,
       PRINT: false,
+      SHORT_IO_SECRET: '',
       SHOW_CONFIG: false,
       SLACK_WEBHOOK_URL: '',
       ...props,
@@ -54,6 +52,7 @@ const getConfig = () =>
       ESPN_LEAGUE_ID: number(),
       ESPN_SEASON_ID: number(),
       ESPN_WEEK_ID: number(),
+      FORCE_SHORT_LINK: stringToBool,
       NOTIFY: stringToBool,
       PREVIOUS_WEEK: stringToBool,
       PRINT: stringToBool,
@@ -64,10 +63,8 @@ const getConfig = () =>
 const validate = cfg => {
   const requiredKeys = [
     'ESPN_LEAGUE_ID',
-    'BITLY_ACCESS_TOKEN',
-    'BITLY_APP_CLIENT_ID',
-    'BITLY_APP_SECRET',
     'ESPN_SESSION_COOKIE',
+    'FORCE_SHORT_LINK',
     'GITHUB_GIST_TOKEN',
     'GOOGLE_DOC_ID',
     'SLACK_WEBHOOK_URL',
