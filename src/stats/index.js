@@ -6,7 +6,7 @@ import { log } from 'utils/log';
 import { fetch as fetchWeekScores } from '../scores';
 import { addAdjustments } from './adjustments';
 
-const { APPLY_TROPHIES, NOTIFY, PRINT, SLACK_WEBHOOK_URL } = getConfig();
+const { APPLY_TROPHIES, FORCE_SHORT_LINK, NOTIFY, PRINT, SLACK_WEBHOOK_URL } = getConfig();
 
 // eslint-disable-next-line no-console
 const print = trophies => PRINT && console.log(Trophy.print(trophies));
@@ -65,13 +65,18 @@ const saveGist = async options => {
 };
 
 const save = async options => {
+  let summaryUrl = '';
+
+  if (FORCE_SHORT_LINK || APPLY_TROPHIES) {
+    summaryUrl = await saveGist(options)
+  }
+
   if (!APPLY_TROPHIES) {
     log(`👋 APPLY_TROPHIES flag is not enabled. Not applying trophies.`);
 
     return;
   }
 
-  const summaryUrl = await saveGist(options);
 
   if (NOTIFY) {
     const { weekId } = options;

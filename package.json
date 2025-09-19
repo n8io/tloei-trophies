@@ -11,7 +11,6 @@
     "test": "babel-tape-runner src/**/*.spec.js"
   },
   "dependencies": {
-    "bitly": "^7.1.2",
     "date-fns": "^2.1.0",
     "dotenv-safe": "^8.1.0",
     "esm": "^3.2.25",
